@@ -1,26 +1,18 @@
-# Copyright 2022 Cartesi Pte. Ltd.
-#
-# SPDX-License-Identifier: Apache-2.0
-# Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-# this file except in compliance with the License. You may obtain a copy of the
-# License at http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software distributed
-# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-# CONDITIONS OF ANY KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations under the License.
 
+from asyncio.log import logger
 import json
 from os import environ
 from urllib.parse import urlparse
 
-import auction.wallet as wallet
+
 import requests
-from auction.auctioneer import Auctioneer
-from auction.log import logger
-from auction.outputs import Error, Log, Output
-from auction.routing import Router
-from auction.util import hex_to_str
+
+from wallet.cartesi_wallet import wallet
+from wallet.cartesi_wallet.outputs import Error, Log, Output
+from wallet.cartesi_wallet.routing import Router
+from wallet.utils.util import hex_to_str
+
+#from auction.util import hex_to_str
 
 logger.info("Auction DApp started")
 
@@ -123,8 +115,7 @@ handlers = {
 
 finish = {"status": "accept"}
 
-auctioneer = Auctioneer(wallet)
-router = Router(wallet, auctioneer)
+router = Router(wallet)
 
 while True:
     logger.debug("Sending finish")
