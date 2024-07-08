@@ -1,12 +1,12 @@
-# backend/auth/auth.py
-
 from functools import wraps
-from flask import request, jsonify, current_app
+from flask import request, jsonify, Blueprint
 import jwt
 from datetime import datetime, timedelta
 
 # Example secret key (replace with your actual secret key)
 SECRET_KEY = 'your_secret_key'
+
+auth_bp = Blueprint('auth', __name__)
 
 def generate_jwt_token(user_id):
     """
@@ -19,7 +19,7 @@ def generate_jwt_token(user_id):
             'sub': user_id  # Subject of the token (user ID)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-        return token.decode('utf-8')
+        return token
     except Exception as e:
         return str(e)
 
@@ -55,3 +55,41 @@ def login_required(func):
         return func(*args, **kwargs)
     
     return decorated_function
+
+@auth_bp.route('/login', methods=['POST'])
+def login():
+    """
+    Handle login requests.
+    """
+    username = request.json.get('username')
+    password = request.json.get('password')
+    
+    # Replace with your own user authentication logic
+    # For demonstration purposes, assume a successful login
+    user_id = 1
+    
+    token = generate_jwt_token(user_id)
+    return jsonify({'token': token}), 200
+
+@auth_bp.route('/register', methods=['POST'])
+def register():
+    """
+    Handle registration requests.
+    """
+    username = request.json.get('username')
+    password = request.json.get('password')
+    
+    # Replace with your own user registration logic
+    # For demonstration purposes, assume a successful registration
+    user_id = 1
+    
+    token = generate_jwt_token(user_id)
+    return jsonify({'token': token}), 201
+
+@auth_bp.route('/protected', methods=['GET'])
+@login_required
+def protected():
+    """
+    Example protected endpoint.
+    """
+    return jsonify({'message': 'Hello, authenticated user!'}), 200

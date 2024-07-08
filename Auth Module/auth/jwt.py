@@ -2,7 +2,6 @@
 
 import jwt
 from datetime import datetime, timedelta
-from flask import current_app
 
 # Example secret key (replace with your actual secret key)
 SECRET_KEY = 'your_secret_key'
