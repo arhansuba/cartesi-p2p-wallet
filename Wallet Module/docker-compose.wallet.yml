@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  wallet:
+    build:
+      context: .
+      dockerfile: Wallet Module/Dockerfile
+    ports:
+      - "5004:5004"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - .:/app

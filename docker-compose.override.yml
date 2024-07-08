@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  api:
+    environment:
+      - FLASK_ENV=production
+
+  auth:
+    environment:
+      - FLASK_ENV=production
+
+  deployment:
+    environment:
+      - FLASK_ENV=production
+
+  service:
+    environment:
+      - FLASK_ENV=production
+
+  wallet:
+    environment:
+      - FLASK_ENV=production

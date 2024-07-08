@@ -6,6 +6,22 @@ from cartesi_wallet.balance import Balance
 from cartesi_wallet.log import logger
 from cartesi_wallet.outputs import Notice, Voucher
 from cartesi_wallet.eth_abi_ext import decode_packed
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/wallet/balance', methods=['GET'])
+def balance():
+    # Balance check logic here
+    pass
+
+@app.route('/wallet/transaction', methods=['POST'])
+def transaction():
+    # Transaction logic here
+    pass
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5004)
 
 # Function selector to be called during the execution of a voucher that transfers funds,
 # which corresponds to the first 4 bytes of the Keccak256-encoded result of "transfer(address,uint256)"

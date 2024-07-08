@@ -1,0 +1,19 @@
+FROM docker.io/cartesi/python:3.10-slim-jammy@sha256:a60d99fcd98d563e633bd06d28e2be94c7da45f335691edd9cbf3a0830694638
+
+# Install machine emulator tools
+ADD https://github.com/cartesi/machine-emulator-tools/releases/download/v0.14.1/machine-emulator-tools-v0.14.1.deb /
+RUN dpkg -i /machine-emulator-tools-v0.14.1.deb && rm /machine-emulator-tools-v0.14.1.deb
+
+# Set the working directory
+WORKDIR /opt/cartesi/dapp
+
+# Copy and install Python dependencies
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt --no-cache
+
+# Clean up unnecessary files and directories
+RUN find /usr/local/lib -type d -name '__pycache__' -exec rm -r {} + \
+    && rm -rf /root/.cache
+
+# Start your application here
+CMD ["python", "app.py"]

@@ -9,6 +9,61 @@ x-credentials:
   POSTGRES_DB: postgres
 
 services:
+  api:
+    build:
+      context: .
+      dockerfile: API Module/api/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ./API Module/api:/app
+
+  auth:
+    build:
+      context: .
+      dockerfile: Auth Module/Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ./Auth Module:/app
+
+  deployment:
+    build:
+      context: .
+      dockerfile: Deployment Module/Dockerfile
+    ports:
+      - "5002:5002"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ./Deployment Module:/app
+
+  service:
+    build:
+      context: .
+      dockerfile: Service Module/Dockerfile
+    ports:
+      - "5003:5003"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ./Service Module:/app
+
+  wallet:
+    build:
+      context: .
+      dockerfile: Wallet Module/Dockerfile
+    ports:
+      - "5004:5004"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ./Wallet Module:/app
+
   hardhat:
     image: cartesi/rollups-hardhat:1.0.0
     command:
@@ -115,21 +170,22 @@ services:
       SNAPSHOT_DIR: /var/opt/cartesi/machine-snapshots
       SNAPSHOT_LATEST: /var/opt/cartesi/machine-snapshots/latest
 
-  server_manager:
-    restart: always
-    ports:
-      - "5001:5001"
-    healthcheck:
-      test: ["CMD-SHELL","bash -c 'echo \"\" > /dev/tcp/127.0.0.1/5001;'"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    volumes:
-      - machine:/var/opt/cartesi/machine-snapshots
-    environment:
-      - SERVER_MANAGER_LOG_LEVEL=warning
-      - REMOTE_CARTESI_MACHINE_LOG_LEVEL=info
-
+server_manager:
+  # Replace this with either 'image' or 'build' depending on your setup
+  image: cartesi/rollups-server-manager:1.0.0  # Example image name and tag
+  restart: always
+  ports:
+    - "5001:5001"
+  healthcheck:
+    test: ["CMD-SHELL","bash -c 'echo \"\" > /dev/tcp/127.0.0.1/5001;'"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+  volumes:
+    - machine:/var/opt/cartesi/machine-snapshots
+  environment:
+    SERVER_MANAGER_LOG_LEVEL: warning
+    REMOTE_CARTESI_MACHINE_LOG_LEVEL: info
   deployer:
     image: cartesi/rollups-cli:1.0.0
     restart: on-failure

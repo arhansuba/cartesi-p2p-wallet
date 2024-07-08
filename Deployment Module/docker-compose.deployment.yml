@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  deployment:
+    build:
+      context: .
+      dockerfile: Deployment Module/Dockerfile
+    ports:
+      - "5002:5002"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - .:/app
